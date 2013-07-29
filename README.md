@@ -1,7 +1,9 @@
-haps: the Hubot Assistive Package System
+haps: hubot assistive package system
 ========================================
 
 Installing Hubot scripts is hard! Now it's easy!
+
+(beware that this is so much a work in progress that I'd be surprised if the code is even syntactically correct. don't use this yet.)
 
 Let's say you want to use [fabulous-github-issues script for Hubot](https://github.com/CarlQLange).
 Previously, this was a several step process that took place mostly in a terminal. Now, it's as easy as
