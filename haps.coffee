@@ -14,7 +14,20 @@
 #	@hubot configure <ENV_VARIABLE NAME> <value>
 #	@hubot uninstall <package name>
 
+http = require 'https'
+github = require 'githubot'
+
+Haps = {}
+
+Haps.list_packages = (msg) ->
+	github.get 'repos/github/hubot-scripts/contents/src/scripts', (scripts) ->
+		names = (script.name.replace(/(\..*)/, '') for script in scripts)
+		msg.send names
+
+
+
 module.exports = (robot) ->
+	github = github robot
 	robot.respond /list packages/i, (msg) ->
 		Haps.list_packages(msg)
 	

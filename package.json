@@ -10,5 +10,8 @@
     "url": "https://github.com/CarlQLange/haps"
   },
   "author": "Carl Lange",
-  "license": "BSD"
+  "license": "BSD",
+  "dependencies": {
+    "githubot": "~0.4.1"
+  }
 }
