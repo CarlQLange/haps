@@ -17,14 +17,54 @@
 http = require 'https'
 github = require 'githubot'
 
+Messages = {
+	NO_SUCH_PACKAGE: (name) -> "I couldn't find a package called #{name}!"
+}
+
 Haps = {}
 
-Haps.list_packages = (msg) ->
+Haps.packages = {}
+
+Haps.get_packages = (cb) ->
 	github.get 'repos/github/hubot-scripts/contents/src/scripts', (scripts) ->
-		names = (script.name.replace(/(\..*)/, '') for script in scripts)
-		msg.send names
+		for script in scripts
+			Haps.packages[script.name.replace /(\..*)/, ''] = script
+		cb()
 
+Haps.parse_script_doc = (script) ->
+	doc = {
+		description: ""
+		dependencies: ""
+		configuration: ""
+		commands: ""
+		notes: ""
+		author: ""
+		all: ""
+	}
 
+	#I am seriously reconsidering major choices in my life
+	# do some bullshit here to parse tomdoc
+	# for now just return the tomdoc string
+	
+	#whee
+	content = new Buffer(script.content, 'base64').toString('utf8')
+	for line in content.split '\n'
+		break if line[0] != '#'
+		doc.all += line[2..]+'\n'
+	
+	doc
+
+Haps.list_packages = (msg) ->
+	Haps.get_packages ->
+		msg.send(pack for pack of Haps.packages)
+
+Haps.info_package = (msg, packageName) ->
+	if !Haps.packages[packageName]
+		msg.send Messages.NO_SUCH_PACKAGE(packageName)
+	else
+		github.get "repos/github/hubot-scripts/contents/#{Haps.packages[packageName].path}", (script) ->
+			#later just send the description
+			msg.send(Haps.parse_script_doc(script))
 
 module.exports = (robot) ->
 	github = github robot
