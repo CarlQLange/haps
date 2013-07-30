@@ -19,6 +19,7 @@ github = require 'githubot'
 
 Messages = {
 	NO_SUCH_PACKAGE: (name) -> "I couldn't find a package called #{name}!"
+	NOT_IMPLEMENTED: () -> "I can't do that yet!"
 }
 
 Haps = {}
@@ -64,7 +65,20 @@ Haps.info_package = (msg, packageName) ->
 	else
 		github.get "repos/github/hubot-scripts/contents/#{Haps.packages[packageName].path}", (script) ->
 			#later just send the description
-			msg.send(Haps.parse_script_doc(script))
+			msg.send(Haps.parse_script_doc(script).all)
+
+Haps.install_package = (msg, packageName) ->
+	msg.send Messages.NOT_IMPLEMENTED()
+
+Haps.upgrade_package = (msg, packageName) ->
+	msg.send Messages.NOT_IMPLEMENTED()
+
+Haps.configure_package = (msg, packageName) ->
+	msg.send Messages.NOT_IMPLEMENTED()
+
+Haps.uninstall_package = (msg, packageName) ->
+	msg.send Messages.NOT_IMPLEMENTED()
+
 
 module.exports = (robot) ->
 	github = github robot
@@ -93,3 +107,4 @@ module.exports = (robot) ->
 	robot.respond /uninstall\s+(.*)/i, (msg) ->
 		packageName = msg.match[1]
 		Haps.uninstall_package(msg, packageName)
+
